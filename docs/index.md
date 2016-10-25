@@ -33,7 +33,7 @@ class Message(models.Model):
 
     user_id = models.CharField(max_length=32)
     message = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)=
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['timestamp']
