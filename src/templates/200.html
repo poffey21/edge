@@ -1,0 +1,163 @@
+<!DOCTYPE html>{% load i18n static staticfiles %}
+<html{% if LANGUAGE_CODE %} lang="{{ LANGUAGE_CODE }}"{% endif %}>
+<head>
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        {% block page_title %}block:page_title | 200.html{% endblock page_title %}
+    </title>
+
+    <link rel="icon" type="image/vnd.microsoft.icon" href="{% static 'site/ico/favicon.ico' %}">
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="{% static 'site/ico/favicon.ico' %}">
+
+    {% block stylesheets %} {# Be sure to use {{ block.super }} when overriding! #}
+        <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'site/css/main.css' %}" rel="stylesheet" type="text/css">
+    {% endblock stylesheets %}
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body id="page-top homePage">
+<div class="container">
+    {% block nav %}
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a href="home" id="headerIcon" class="hidden-xs"></a>
+                <a class="navbar-brand" href="/">Django Project</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    {% block menu %}
+                    <!-- Menu Block -->
+                    {% if menu %}
+                    {% for item in menu %}
+                    <li class="{{ item.classes }} {{ item.active }}">
+                        <a href="{{ item.url|default:'#' }}">
+                            {{ item.title|default:'Empty Title' }}
+                            {% if item.label %}
+                            <span class="label {% if item.label_class %}label-{{ item.label_class }}{% endif %}">
+                                {{ item.label }}
+                            </span>{% endif %}
+                        </a>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+                    {% endblock menu %}
+
+                    {% if authentication_installed %}
+                    <div class="btn-group pull-right">
+                    {% if user.is_authenticated %}
+                        <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" id="userMenu" aria-expanded="false">
+                        {{ user.first_name }} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="mailto:tim.poffenbarger@countryfinancial.com?subject=Project Feedback" id="feedbackHeaderLink"><span class="fa fa-envelope"></span> Feedback</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'account:profile' %}" id="profileHeaderLink"><span class="fa fa-user"></span> View Profile</a></li>
+                            <li><a href="{% url 'account:group-list' %}" id="groupsHeaderLink"><span class="fa fa-globe"></span> Users & Groups</a></li>
+                            <li><a href="{% url 'account:logout' %}"><span class="fa fa-sign-out"></span> Logout</a></li>
+                            {% if user.is_superuser %}
+                            <li role="presentation"><a href="/admin/"><span class="fa fa-dashboard"></span> Admin Console</a></li>
+                            <li><form method="get" action="{% url 'account:set_session' %}"><input name="user_id" type="text" value="{{ user.username }}"></form></li>
+                            {% endif %}
+                        </ul>
+                    {% else %}
+                        <a href="{% url 'account:login' %}">
+                            <button type="button"
+                                    class="btn btn-primary dropdown-toggle btn-sm"
+                                    id="loginMenu"
+                                    aria-expanded="false">
+                                Login
+                            </button>
+                        </a>
+                    {% endif %}
+                    </div>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endblock nav %}
+
+    {% block page %}
+        <div class="page">
+        <!--[if IE ]>
+            <span class="label label-warning">This does not work in Internet Explorer</span>
+        <![endif]-->
+
+        {% block messages %}
+            {% if messages %}
+            <div class="section-messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+                    {% endfor %}
+            </div>
+            {% endif %}
+        {% endblock messages %}
+
+        {% block content %}
+        <div class="jumbotron">
+            <h1>templates/200.html</h1>
+            <p class="lead">Use the template language's extend feature inherit this template and replace the content block.</p>
+            <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+          </div>
+
+          <div class="row marketing">
+            <div class="col-lg-6">
+              <h4>Subheading</h4>
+              <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+              <h4>Subheading</h4>
+              <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+              <h4>Subheading</h4>
+              <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+            </div>
+
+            <div class="col-lg-6">
+              <h4>Subheading</h4>
+              <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+              <h4>Subheading</h4>
+              <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+              <h4>Subheading</h4>
+              <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+            </div>
+        </div>
+        {% endblock content %}
+        {% block footer %}
+        <footer class="footer">
+          <div class="container">
+            <p class="text-muted">Basic Footer.</p>
+          </div>
+        </footer>
+        {% endblock footer %}
+        </div>
+    {% endblock page %}
+</div>
+
+{% block javascripts %} {# Be sure to use {{ block.super }} when overriding! #}
+<script src="{% static 'jquery/js/jquery-2.1.1.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+<script src="{% static 'site/js/site.js' %}"></script>
+{% endblock javascripts %}
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% extends '200.html' %}
+
+{% block nav %}{% endblock nav %}
+{% block footer %}{% endblock footer %}
+
+{% block stylesheets %}
+{{ block.super }}
+<style>
+.page {
+    margin-top: 0px;
+}
+.panel {
+    max-width: 400px;
+    margin: 10px auto 0;
+    border: 1px solid #aaa;
+}
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <img src="/static/site/img/logo-big.png" class="img-responsive center-block">
+              <br>
+              <br>
+
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+            <form id="loginForm" class="form-signin" role="form"  action="" method="post">
+                {% csrf_token %}
+                <div class="form-group" style="display: block;">
+                    {{ form.username.errors }}
+                    <label for="id_username">Username</label>
+                    <input class="form-control"  autofocus="" id="id_username" maxlength="254" name="username" type="text" required="">
+                </div>
+                <div class="form-group" style="display: block;">
+                    {{ form.password.errors }}
+                    <label for="id_password">Password</label>
+                    <input class="form-control"  id="id_password" name="password" type="password" required="">
+                </div>
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+            </form>
+          </div>
+        </div>
+</div>
+{% endblock content %}

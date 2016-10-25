@@ -1,0 +1,21 @@
+{% extends '200.html' %}
+
+{% block content %}
+<p>First Name: {{ object.first_name }}</p>
+<p>Last Name: {{ object.last_name }}</p>
+<p>Groups: {% for group in object.groups.all %}{{ group }}, {% endfor %}</p>
+<p>API Key: {{ object.token|default:'Has not yet been generated.' }}</p>
+<p class="api-key">
+    <button type="submit" class="btn btn-default" read-only>Generate API Key</button>
+</p>
+{% endblock %}
+
+
+{% block javascripts %}
+{{ block.super }}
+<script>
+$.get( "{% url 'account:generate-api-key' %}", function( data ) {
+  $( ".api-key" ).html( data );
+});
+</script>
+{% endblock %}

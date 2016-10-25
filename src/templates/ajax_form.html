@@ -1,0 +1,7 @@
+<form  class="form-inline" action="{{ url }}" method="post">
+    {% csrf_token %}
+    {% if form %}
+    {{ form }}
+    {% endif %}
+    <button type="submit" class="btn btn-{{ button_class|default:'default' }}">{{ button_message|default:'Submit' }}</button>
+</form>
