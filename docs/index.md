@@ -2,7 +2,7 @@ Welcome to {{ project_name }}!
 ==============================
 
 ```
-django-admin startproject --template=edge/archive/master.zip -e=py -e=md -e=env -e=bat -e=ps1 demo
+django-admin startproject --template=https://github.com/poffey21/edge/archive/master.zip -e=py -e=md -e=env -e=bat -e=ps1 demo
 cp .\local.env .\demo\src\demo\settings\
 cd demo
 git init .
