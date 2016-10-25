@@ -59,6 +59,27 @@ class MessageView(generic.CreateView):
         return context
 ```
 
+Add Template to `chat/templates/message_form.html`
+
+```
+{% extends '200.html' %}
+
+{% block content %}
+We are in the chat window.
+<form  class="form" action="{{ url }}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn btn-{{ button_class|default:'default' }}">{{ button_message|default:'Submit' }}</button>
+</form>
+
+<ul class="list-group">
+{% for obj in object_list %}
+    <li class="list-group-item"><span class="label label-primary">{{ obj.user_id }}</span>{{ obj.message }}</li>
+{% endfor %}
+</ul>
+{% endblock content %}
+```
+
 
 Add URLs.py to `chat/urls.py`
 
@@ -86,3 +107,4 @@ Add menu item to `demo/context_processors.py`
         'url': determine_url('chat:chat-session'),
     },
 ```
+
