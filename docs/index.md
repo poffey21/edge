@@ -197,5 +197,19 @@ Add menu item to `demo/context_processors.py`
 
 
 ###################################################
+
+add putty 80:localhost:8100
+
+```
+git clone https://github.com/poffey21/demo.git 8100
+cp local.env 8100/src/demo/settings
+export DJANGO_SETTINGS_MODULE=demo.settings.production
+cd 8100/src
+python manage.py migrate
+python manage.py collectstatic
+cd -
+uwsgi --ini demo.ini
+```
+
 ###################################################
 

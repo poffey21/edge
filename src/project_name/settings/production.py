@@ -8,7 +8,7 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 # Must mention ALLOWED_HOSTS in production!
-# ALLOWED_HOSTS = ["{{ project_name }}.com"]
+ALLOWED_HOSTS = ["{{ project_name }}.com", "{{ project_name }}.local"]
 
 # Cache the templates in memory for speed-up
 loaders = [
@@ -22,7 +22,7 @@ TEMPLATES[0]['OPTIONS'].update({"loaders": loaders})
 TEMPLATES[0].update({"APP_DIRS": False})
 
 # Define STATIC_ROOT for the collectstatic command
-STATIC_ROOT = join(BASE_DIR, '..', 'site', 'static')
+STATIC_ROOT = join(dirname(SITE_ROOT), 'static')
 
 # Log everything to the logs directory at the top
 LOGFILE_ROOT = join(dirname(SITE_ROOT), 'logs')

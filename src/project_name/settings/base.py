@@ -102,7 +102,7 @@ WSGI_APPLICATION = '{{ project_name }}.wsgi.application'
 DATABASES = {
     # Raises ImproperlyConfigured exception if DATABASE_URL not in
     # os.environ
-    'default': env.db(var='DJANGO_DATABASE_URL'),
+    'default': env.db(var='DJANGO_DATABASE_URL', ),
 }
 
 # Internationalization
