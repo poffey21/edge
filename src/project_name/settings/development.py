@@ -27,8 +27,9 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--with-coverage',
     # make sure applications are enabled
-    '--cover-package=authentication',
 ]
+if not DISABLE_AUTHENTICATION:
+    NOSE_ARGS += ['--cover-package=authentication']
 
 # Show emails to console in DEBUG mode
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

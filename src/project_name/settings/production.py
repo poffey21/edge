@@ -25,7 +25,7 @@ TEMPLATES[0].update({"APP_DIRS": False})
 STATIC_ROOT = join(BASE_DIR, '..', 'site', 'static')
 
 # Log everything to the logs directory at the top
-LOGFILE_ROOT = join(dirname(BASE_DIR), 'logs')
+LOGFILE_ROOT = join(dirname(SITE_ROOT), 'logs')
 
 # Reset logging
 LOGGING_CONFIG = None

@@ -7,11 +7,17 @@ https://docs.djangoproject.com/en/dev/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
+import os
+
 from django.core.urlresolvers import reverse_lazy
 from os.path import dirname, join, exists
 
 # Build paths inside the project like this: join(BASE_DIR, "directory")
 BASE_DIR = dirname(dirname(dirname(__file__)))
+if __file__.startswith('.'):
+    BASE_DIR = os.getcwd()
+SITE_ROOT = os.path.dirname(BASE_DIR)
+
 STATICFILES_DIRS = [join(BASE_DIR, 'static')]
 MEDIA_ROOT = join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
@@ -129,7 +135,7 @@ MESSAGE_TAGS = {
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
-DISABLE_AUTHENTICATION = True
+DISABLE_AUTHENTICATION = False
 if not DISABLE_AUTHENTICATION:
     AUTHENTICATION_BACKENDS += [
         'authentication.backends.UniversalLdapBackendWithPassword',

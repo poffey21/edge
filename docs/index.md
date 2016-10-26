@@ -9,6 +9,7 @@ cd demo
 git init .
 git add .
 git commit -m "initial commit"
+git log  # the SHA-1 Hash of name/size/text of every file
 git branch create-chat-app
 git checkout create-chat-app
 scripts/local_enable.ps1
@@ -22,10 +23,6 @@ git add .
 git commit -m "added files created by startapp"
 git log
 
-mkdir src/chat/tests
-touch src/chat/tests/__init__.py
-mv src/chat/tests.py src/chat/tests/test_views.py
-cp src/chat/tests/test_views.py src/chat/tests/test_models.py
 git add .
 git commit -m "updated tests directory to separate views and models"
 git log
@@ -35,12 +32,6 @@ git log
 
 ```
 'chat',
-```
-
-### Setup tests
-
-```
-
 ```
 
 ### Add model to chat/models.py
@@ -70,7 +61,9 @@ git log
 `tests/test_models.py`
 
 ```
-from .. import models
+from django.urls import reverse
+
+from . import models
 
 
 class MessageTestCase(TestCase):
@@ -142,7 +135,6 @@ class MessageView(generic.CreateView):
 Add Template to `chat/templates/message_form.html`
 
 ```
-{% extends '200.html' %}
 
 {% block title %}Chat Session{% endblock %}
 
@@ -178,15 +170,32 @@ urlpatterns = [
 Add URL to `demo/urls.py`
 
 ```
-url(r'^chat/', include('chat.urls', namespace='chat')),
+    url(r'^chat/', include('chat.urls', namespace='chat')),
 ```
 
 Add menu item to `demo/context_processors.py`
 
 ```
-    {
-        'title': 'Chat',
-        'url': determine_url('chat:chat-session'),
-    },
+        {
+            'title': 'Chat',
+            'url': determine_url('chat:chat-session'),
+        },
 ```
+
+### Add View Tests to `chat/tests.py`
+
+```
+    def test_new_subscription_page(self):
+        response = self.client.post(
+            reverse('chat:chat-session'),
+            {'user_id': ('d' * 8), 'message': 'this is a new message'},
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='chat/message_form.html')
+```
+
+
+###################################################
+###################################################
 
