@@ -64,6 +64,8 @@ Add Template to `chat/templates/message_form.html`
 ```
 {% extends '200.html' %}
 
+{% block title %}Chat Session{% endblock %}
+
 {% block content %}
 We are in the chat window.
 <form  class="form" action="{{ url }}" method="post">
