@@ -29,6 +29,7 @@ LOGFILE_ROOT = join(dirname(SITE_ROOT), 'logs')
 
 # Reset logging
 LOGGING_CONFIG = None
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -42,22 +43,33 @@ LOGGING = {
         },
     },
     'handlers': {
+        'django_log_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': join(LOGFILE_ROOT, 'django.log'),
+            'formatter': 'verbose'
+        },
         'proj_log_file': {
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': join(LOGFILE_ROOT, 'project.log'),
             'formatter': 'verbose'
         },
         'console': {
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         }
     },
     'loggers': {
+        'django': {
+            'handlers': ['django_log_file'],
+            'propagate': True,
+            'level': 'WARNING',
+        },
         'project': {
             'handlers': ['proj_log_file'],
-            'level': 'DEBUG',
+            'level': 'WARNING',
         },
     }
 }
