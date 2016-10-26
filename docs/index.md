@@ -27,7 +27,7 @@ python manage.py runserver
 1) Grab the chicken
 2) Merge your branch with master
 3) Run your tests
-4) git pull (or git fetch && git merge)
+4) git pull --rebase
 5) run your tests
 6) git push -u origin master
 7) deploy app
@@ -118,7 +118,7 @@ class MessageTestCase(TestCase):
 `demo/settings/development.py`
 
 ```
-`'--cover-package=chat',
+'--cover-package=chat',
 ```
 
 
@@ -155,7 +155,7 @@ class MessageView(generic.CreateView):
         return context
 ```
 
-Add Template to `chat/templates/message_form.html`
+Add Template to `templates/chat/message_form.html`
 
 ```
 

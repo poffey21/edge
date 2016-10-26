@@ -54,7 +54,7 @@ class GenerateApiKey(UserIDRequiredMixin, generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super(GenerateApiKey, self). get_context_data(**kwargs)
         context['button_message'] = 'Generate API Key'
-        context['url'] = '{}?next={}'.format(self.request.path, self.request.GET.get('next', reverse('account:profile')))
+        context['url'] = '{}?next={}'.format(self.request.path, self.request.GET.get('next', reverse_lazy('account:profile')))
         return context
 
     def form_valid(self, form):
