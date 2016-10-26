@@ -16,13 +16,33 @@ scripts/local_enable.ps1
 python manage.py test
 python manage.py migrate
 python manage.py runserver
+
+# Check-in Process. The game for all of the dyslexic developers.
+1) Grab the chicken
+2) Merge your branch with master
+3) Run your tests
+4) git pull (or git fetch && git merge)
+5) run your tests
+6) git push -u origin master
+7) deploy app
+  - git pull
+  - python manage.py migrate
+  - python manage.py collectstatic
+  - cd ..
+  - uwsgi --ini demo.ini
+8) Put the chicken back.
+############################################################
+
 python manage.py startapp chat
 
 rm chat/admin.py
 git add .
 git commit -m "added files created by startapp"
 git log
-
+git log -p
+git log -p -2
+git log --stat -2
+git log --pretty=oneline
 ```
 
 ### Add app to `demo/settings/base.py`
@@ -145,7 +165,7 @@ We are in the chat window.
 
 <ul class="list-group">
 {% for obj in object_list %}
-    <li class="list-group-item"><span class="label label-primary">{{ obj.username }}</span>{{ obj.message }}</li>
+    <li class="list-group-item"><span class="label label-primary">{{ obj.username }}: </span> {{ obj.message }}</li>
 {% endfor %}
 </ul>
 {% endblock content %}
@@ -192,6 +212,15 @@ Add menu item to `demo/context_processors.py`
         self.assertTemplateUsed(response, template_name='chat/message_form.html')
 ```
 
+py manage.py makemigrations
+py manage.py test
+py manage.py runserver
+git status
+# grab the chicken
+git checkout master
+git pull origin
+git merge --no-ff feature-chat-app
+git push -u origin master
 
 ###################################################
 
@@ -199,7 +228,7 @@ add putty 80:localhost:8100
 
 ```
 git clone https://github.com/poffey21/demo.git 8100
-cp local.env 8100/src/demo/settings
+cp local.env 8100/src/demo/settings/
 export DJANGO_SETTINGS_MODULE=demo.settings.production
 cd 8100/src
 python manage.py migrate
@@ -209,9 +238,12 @@ uwsgi --ini demo.ini
 http://demo.local/
 ```
 
+
 ###################################################
 
 ## Time to migrate
+
+git checkout -b feature-ldap-integration
 
 Add true to `demo/context_processors.py`
 
@@ -230,6 +262,8 @@ And test: `python .\manage.py test`
 add Mixin to MessageView `class MessageView(UserIDRequiredMixin, generic.CreateView):`
 
 Update chat/views.py:
+
+https://ccbv.co.uk/projects/Django/1.10/django.views.generic.edit/CreateView/
 
 ```
 from authentication.views import UserIDRequiredMixin
@@ -270,3 +304,13 @@ Update chat/tests.py
         self.assertTemplateUsed(response, template_name='chat/message_form.html')
 ```
 
+py manage.py makemigrations
+py manage.py test
+py manage.py runserver
+git status
+git commit -am "added user field and enabled ldap login"
+# grab the chicken
+git checkout master
+git fetch origin
+git merge --no-ff feature-ldap-integration
+git log --pretty=format:"%h %s" --graph
