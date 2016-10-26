@@ -2,21 +2,33 @@ Welcome to {{ project_name }}!
 ==============================
 
 ```
-django-admin startproject --template=https://github.com/poffey21/edge/archive/master.zip -e=py -e=md -e=env -e=bat -e=ps1 demo
-cp .\local.env .\demo\src\demo\settings\
+#Windows
+django-admin startproject --template=https://github.com/poffey21/edge/archive/master.zip -e=py -e=env -e=bat -e=ps1 -n=README.md demo
+cp ./local.env ./demo/src/demo/settings/
 cd demo
 git init .
 git add .
 git commit -m "initial commit"
 git branch create-chat-app
 git checkout create-chat-app
-scripts\local_enable.ps1
+scripts/local_enable.ps1
 python manage.py test
 python manage.py migrate
 python manage.py runserver
 python manage.py startapp chat
 
+rm chat/admin.py
+git add .
+git commit -m "added files created by startapp"
+git log
 
+mkdir src/chat/tests
+touch src/chat/tests/__init__.py
+mv src/chat/tests.py src/chat/tests/test_views.py
+cp src/chat/tests/test_views.py src/chat/tests/test_models.py
+git add .
+git commit -m "updated tests directory to separate views and models"
+git log
 ```
 
 ### Add app to `demo/settings/base.py`
@@ -25,7 +37,13 @@ python manage.py startapp chat
 'chat',
 ```
 
-### Add model to chat/modes.py
+### Setup tests
+
+```
+
+```
+
+### Add model to chat/models.py
 
 ```
 class Message(models.Model):
@@ -38,6 +56,55 @@ class Message(models.Model):
     class Meta:
         ordering = ['timestamp']
 ```
+
+```
+python manage.py makemigrations
+git status
+git add .
+git commit -m "created model for message"
+git log
+```
+
+##### Test model
+
+`tests/test_models.py`
+
+```
+from .. import models
+
+
+class MessageTestCase(TestCase):
+    """Quick and simple unit tests for Message Model"""
+
+    def test_creation_of_message(self):
+        """ Let's make sure we can create a message """
+        obj = models.Message.objects.create(
+            user_id='DL12924',
+            message='This is a new message'
+        )
+        self.assertEqual(obj.message, u'This is a new message')
+
+    def test_ordering_of_messages(self):
+        """ Let's see if the order is correct """
+        for i in range(99):
+            models.Message.objects.create(
+                user_id='DL12924',
+                message='This is a new message'
+            )
+        last_message = models.Message.objects.create(
+            user_id='DL12924',
+            message='This is the newest message'
+        )
+        self.assertEqual(100, models.Message.objects.count())
+        self.assertEqual(last_message, models.Message.objects.all().last())
+```
+
+`demo/settings/development.py`
+
+```
+`'--cover-package=chat',
+```
+
 
 ### Add view to chatops/views.py
 

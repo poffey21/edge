@@ -1,15 +1,62 @@
+import re
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth import authenticate, get_user_model
+from django.db.models.functions import Length
 from django.test import Client
 from django.test import TestCase
 
 # Create your tests here.
 from django.urls import reverse
+from django.utils.crypto import get_random_string
+
+from . import models
+
+
+def special_match(strg, search=re.compile(r'[^a-zA-Z0-9!]').search):
+    return not bool(search(strg))
+
+
+class TokenTestCase(TestCase):
+    """Quick and simple unit tests for Token Model"""
+
+    def test_random_string(self):
+        self.assertEqual(128, len(models.unusable_string()))
+
+    def test_creation_of_token(self):
+        """ Let's ensure that the token is the correct length and that it only has one ! """
+        obj = models.Token.objects.create(
+            user=authenticate(username=settings.TEST_LDAP_USER)
+        )
+        self.assertEqual(obj.__unicode__(), u'Not yet generated.')
+        self.assertEqual(18, len(obj.hint))
+        self.assertEqual(128, len(obj.api_key_encoded))
+        self.assertEqual(obj.user, authenticate(username=settings.TEST_LDAP_USER))
+        for x in range(100):
+            api_key = obj.generate_api_key('d' * x)
+            self.assertEqual(16, len(obj.hint))
+            self.assertEqual(obj.__str__(), obj.hint)
+            self.assertEqual(81, len(api_key))
+            self.assertIn('$', obj.api_key_encoded)
+            self.assertEqual(2, len(api_key.split('!')))
+            r = special_match(api_key)
+            if not r:
+                print(api_key)
+            self.assertTrue(r)
+
+    def test_multiple_random_keys_can_be_blank(self):
+        """ Let's ensure that the token is the correct length and that it only has one ! """
+        mgr = models.Token.objects
+        u_mgr = get_user_model().objects
+        for x in range(100):
+            mgr.create(user=u_mgr.create(username=get_random_string(16)), )
+
+        self.assertEqual(100, mgr.annotate(
+            text_len=Length('random_key')
+        ).filter(text_len__gt=10).count())
 
 
 class SubscriptionTestCase(TestCase):
-    
     def setUp(self):
         self.username = unicode(settings.TEST_LDAP_USER)
         self.password = unicode(settings.TEST_LDAP_PASS)
