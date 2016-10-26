@@ -8,15 +8,14 @@
 
 ## Features
 
-* Ready Bootstrap-themed pages
-* User Registration/Sign up
+* LDAP Integrations
 * Better Security with [12-Factor](http://12factor.net/) recommendations 
 * Logging/Debugging Helpers
 * Works on Python 2.7 or 3.4
 
 ## Quick start:
 
-1. `$ django-admin.py startproject --template=https://github.com/arocks/edge/archive/master.zip --extension=py,md,html,env my_proj`
+1. `$ django-admin.py startproject --template=https://github.com/poffey21/edge/archive/master.zip --extension=py,md,html,env my_proj`
 2. `$ cd my_proj`
 3. `$ pip install -r requirements.txt `
 4. `$ cd src`
@@ -40,7 +39,7 @@ Rest of this README will be copied to the generated project.
 
 This project has the following basic apps:
 
-* App1 (short desc)
+* Authentication: Enables LDAP Authentication along with multiple hooks into different frameworks
 * App2 (short desc)
 * App3 (short desc)
 
@@ -51,7 +50,7 @@ This project has the following basic apps:
 To set up a development environment quickly, first install Python 3. It
 comes with virtualenv built-in. So create a virtual env by:
 
-    1. `$ python3 -m venv {{ project_name }}`
+    1. `$ python -m venv {{ project_name }}`
     2. `$ . {{ project_name }}/bin/activate`
 
 Install all dependencies:

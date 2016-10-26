@@ -3,6 +3,12 @@ Welcome to {{ project_name }}!
 
 ```
 #Windows
+git config --global http.sslVerify
+git config --global user.name
+git config --global user.email
+git config --global core.autocrlf
+git config --global color.ui
+
 django-admin startproject --template=https://github.com/poffey21/edge/archive/master.zip -e=py -e=env -e=bat -e=ps1 -n=README.md demo
 cp ./local.env ./demo/src/demo/settings/
 cd demo
