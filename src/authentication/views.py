@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.http import Http404
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.html import format_html
 from django.views import generic
@@ -15,7 +15,7 @@ from . import models
 
 class UserIDRequiredMixin(object):
 
-    @method_decorator(login_required(login_url='/auth/accounts/login/'))
+    @method_decorator(login_required(login_url=reverse_lazy('account:login')))
     def dispatch(self, request, *args, **kwargs):
         return super(UserIDRequiredMixin, self).dispatch(request, *args, **kwargs)
 

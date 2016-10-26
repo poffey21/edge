@@ -48,5 +48,6 @@ def generate_menu(request):
             item['active'] = 'active'
     return {
         'menu': menu,
-        'authentication_installed': 'authentication' in settings.INSTALLED_APPS and not settings.DISABLE_AUTHENTICATION,
+        'authentication_installed': False,
+        # 'authentication_installed': 'authentication' in settings.INSTALLED_APPS and not settings.DISABLE_AUTHENTICATION,
     }
