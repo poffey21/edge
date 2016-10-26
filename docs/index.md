@@ -46,9 +46,22 @@ from django.views import generic
 
 from . import models
 
+
 class MessageView(generic.CreateView):
     model = models.Message
     fields = ['user_id', 'message']
+
+    def get_initial(self):
+        initial = self.initial.copy()
+        user_id = self.request.session.get('user_id', None)
+        if user_id:
+            initial['user_id'] = user_id
+        return initial
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.request.session['user_id'] = self.object.user_id
+        return super(MessageView, self).form_valid(form)
 
     def get_success_url(self):
         return self.request.path
